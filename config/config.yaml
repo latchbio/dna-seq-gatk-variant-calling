@@ -2,12 +2,9 @@ samples: config/samples.tsv
 units: config/units.tsv
 
 ref:
-  # ensembl species name
-  species: homo_sapiens
-  # ensembl release
+  species: saccharomyces_cerevisiae
   release: 98
-  # genome build
-  build: GRCh38
+  build: R64-1-1
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
@@ -23,11 +20,7 @@ filtering:
 
 processing:
   remove-duplicates: true
-  # Uncomment and point to a bed file with, e.g., captured regions if necessary,
-  # see https://gatkforums.broadinstitute.org/gatk/discussion/4133/when-should-i-use-l-to-pass-in-a-list-of-intervals.
-  # restrict-regions: captured_regions.bed
-  # If regions are restricted, uncomment this to enlarge them by the given value in order to include
-  # flanking areas.
+  # restrict-regions: ../raw/captured_regions.bed
   # region-padding: 100
 
 params:
@@ -41,14 +34,12 @@ params:
   trimmomatic:
     pe:
       trimmer:
-        # See trimmomatic manual for adding additional options, e.g. for adapter trimming.
         - "LEADING:3"
         - "TRAILING:3"
         - "SLIDINGWINDOW:4:15"
         - "MINLEN:36"
     se:
       trimmer:
-        # See trimmomatic manual for adding additional options, e.g. for adapter trimming.
         - "LEADING:3"
         - "TRAILING:3"
         - "SLIDINGWINDOW:4:15"
@@ -58,5 +49,4 @@ params:
       # Add any plugin from https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
       # Plugin args can be passed as well, e.g. "LoFtool,path/to/custom/scores.txt".
       - LoFtool
-    # extra command line arguments (e.g. --sift, see docs)
     extra: ""
