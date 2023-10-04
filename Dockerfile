@@ -21,10 +21,9 @@ arg DEBIAN_FRONTEND=noninteractive
 
 # Latch SDK
 # DO NOT REMOVE
-run pip install latch==2.32.8
-run mkdir /opt/latch
-
 run pip install pandas
+copy latch_cli /root/latch_cli
+run cd /root/latch_cli && pip install -e ".[snakemake]"
 
 # Copy workflow data (use .dockerignore to skip files)
 copy . /root/
@@ -32,6 +31,21 @@ copy . /root/
 # Latch snakemake workflow entrypoint
 # DO NOT CHANGE
 copy .latch/snakemake_jit_entrypoint.py /root/snakemake_jit_entrypoint.py
+
+# Install Mambaforge
+run apt-get update --yes && \
+    apt-get install --yes curl vim && \
+    curl \
+        --location \
+        --fail \
+        --remote-name \
+        https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh && \
+    `# Docs for -b and -p flags: https://docs.anaconda.com/anaconda/install/silent-mode/#linux-macos` \
+    bash Mambaforge-Linux-x86_64.sh -b -p /opt/conda -u && \
+    rm Mambaforge-Linux-x86_64.sh
+
+# Set conda PATH
+env PATH=/opt/conda/bin:$PATH
 
 # Latch workflow registration metadata
 # DO NOT CHANGE
